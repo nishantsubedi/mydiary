@@ -1,18 +1,18 @@
 <%- include('../_layouts/header') %>
 
     <h2 class="page-title"> Add a story</h2>
-    <a href='/' class="btn btn-danger"> Cancel</a>
+    <a href='/diary' class="btn btn-danger"> Cancel</a>
     <br><br>
 
     <form method="post" action="/diary/write">
         <div class="form-group">
             <label for="">Title</label>
-            <input class="form-control" type="text" name="title" value="" placeholder="Title">
+            <input class="form-control" type="text" name="title" value="<%= form.title %>" placeholder="Title">
         </div>
         
         <div class="form-group">
                 <label for="">Content</label>
-                <textarea class="form-control" id="ta" name="content" cols="30" rows="10" placeholder="Content"></textarea>
+                <textarea class="form-control" id="ta" name="content" cols="30" rows="10" placeholder="Content"><%= form.content %></textarea>
         </div>
         
         <button class="btn btn-success">Submit</button>

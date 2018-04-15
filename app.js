@@ -3,6 +3,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
+const session = require('express-session');
 const config = require('./config/database');
 
 // Connect to db
@@ -22,6 +23,16 @@ app.set('view engine', 'ejs');
 
 // set public folder
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Express session middleware
+app.use(session({
+    secret: 'keyboard cat',
+    resave: true,
+    saveUninitialized: true,
+    // cookie: { secure: true }
+  }));
+
+
 
 //Body Parser middleware
 //
