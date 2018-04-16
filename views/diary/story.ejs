@@ -1,11 +1,11 @@
 <%- include('../_layouts/header') %>
 
 
-<a href='/diary' class="btn btn-primary">Back</a>
+<a href='/diary/page/<%= pageno %>' class="btn btn-primary">Back</a>
 <div class="col-sm-1 pull-right">
 <a class="btn btn-danger"  onclick="deleteThis('<%= id %>')" data-toggle="modal" data-target="#deleteStoryModal"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp;Delete </a>
 </div>
-<a class="btn btn-info pull-right" href="/diary/edit/<%= id %>"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp; Edit </a>
+<a class="btn btn-info pull-right" href="/diary/edit/<%= id %>?pageno=<%= pageno %>"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp; Edit </a>
 <br><br>
 <hr>
 <div class="container-fluid story-div">

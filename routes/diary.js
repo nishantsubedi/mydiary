@@ -7,11 +7,38 @@ const dateTime = require('node-datetime');
 var Story = require('../models/story');
 
 // get diary index
-router.get('/', (req, res) => {
+router.get('/page/:pageno', (req, res) => {
     Story.find({}).sort({updated: -1}).exec((err, stories) => {
+        var pageno = req.params.pageno;
+        
+        var storyList= [];
+        var counterPage = 0;
+        var counterStory = 0;
+        var pageLimit = 5;
+        var page = 0;
+        var pageLength = stories.length;
+    //    console.log(stories[1]);
+        storyList[page] = [];
+            while(counterStory < pageLength ){
+                if(counterPage > pageLimit - 1){
+                    counterPage = 0;
+                    page++;
+                    storyList[page] = [];
+                }
+                storyList[page][counterPage] = stories[counterStory];
+                counterStory++;
+                counterPage++;
+               
+            }
+            // console.log(storyList[0]);
+        
+        // // console.log(stories);
+        // console.log(storyList[pageno-1]);
         res.render('diary/diary', {
             title: 'Stories',
-            stories: stories  
+            stories: storyList[pageno - 1],
+            pageno: pageno,
+            noOfPages: page + 1
         }); 
     });
    
@@ -19,12 +46,16 @@ router.get('/', (req, res) => {
 
 // GET write diaries page
 router.get('/write', (req, res) => {
+    var pageno = req.query.pageno;
+    if(!pageno) pageno = 1;
     res.render('diary/write', {
         title: 'Write a Story',
         form: {
             title: '',
             content: ''
-        }
+            
+        },
+        pageno: pageno
     });
 });
 
@@ -35,6 +66,8 @@ router.post('/write', (req, res) => {
     var dt = dateTime.create();
     var formatted = dt.format('Y-m-d H:M:S');
 
+    var pageno = req.query.pageno;
+    if(!pageno) pageno = 1;
 
     req.checkBody('content', 'Content mush have a value').notEmpty();
 
@@ -49,7 +82,8 @@ router.post('/write', (req, res) => {
             form: {
                 title: title,
                 content: content
-            }
+            },
+            pageno: pageno
         }); 
     } else {
         if(title == ""){
@@ -76,7 +110,7 @@ router.post('/write', (req, res) => {
         story.save((err) => {
             if(err) console.log(err);
             req.flash('success', 'Story Added');
-            res.redirect('/diary');
+            res.redirect('/diary/page/'+ 1);
         });
        
     }
@@ -88,6 +122,8 @@ router.post('/write', (req, res) => {
 * GET edit Story page
 */
 router.get('/edit/:id', function(req, res){
+    var pageno = req.query.pageno;
+    if(!pageno) pageno = 1;
     Story.findById(req.params.id, (err, story) => {
         if(err) {
             // return console.log(err);
@@ -95,14 +131,15 @@ router.get('/edit/:id', function(req, res){
         }
         
         if(!story){
-            res.redirect('/diary');
+            res.redirect('/diary/page/1');
         }   
         
         else{
             res.render('diary/edit', {
                 title: story.title,
                 content: story. content,
-                id: story._id
+                id: story._id,
+                pageno: pageno
             });
         }
     });
@@ -118,6 +155,8 @@ router.post('/edit/:id', (req, res) => {
     var dt = dateTime.create();
     var formatted = dt.format('Y-m-d H:M:S');
     
+    var pageno = req.query.pageno;
+    if(!pageno) pageno = 1;
 
     req.checkBody('content', 'Content mush have a value').notEmpty();
 
@@ -133,7 +172,8 @@ router.post('/edit/:id', (req, res) => {
             form: {
                 title: title,
                 content: content
-            }
+            },
+            pageno: pageno
         }); 
     } else {
         if(title == ""){
@@ -159,7 +199,7 @@ router.post('/edit/:id', (req, res) => {
             story.save((err) => {
                 if(err) console.log(err);
                 req.flash('success', 'Story Edited');
-                res.redirect('/diary/');
+                res.redirect('/diary/page/1');
             });
         });
        
@@ -171,6 +211,8 @@ router.post('/edit/:id', (req, res) => {
 
 // GET story page
 router.get('/story/:id', (req, res) => {
+    var pageno = req.query.pageno;
+    if(!pageno) pageno = 1;
     Story.findById(req.params.id, (err, story) => {
         if(err) console.log(err);
         if(!story){
@@ -179,7 +221,8 @@ router.get('/story/:id', (req, res) => {
                 res.render('diary/story', {
                 title: story.title,
                 content: story.content,
-                id: story._id
+                id: story._id,
+                pageno: pageno
             });
         }
 
@@ -194,7 +237,7 @@ router.get('/delete/:id', function(req, res){
     Story.findByIdAndRemove(req.params.id, (err) => {
         if(err) return console.log(err);
         req.flash('success', 'Story Deleted');
-        res.redirect('/diary/');
+        res.redirect('/diary/page/1');
     })
     
 });

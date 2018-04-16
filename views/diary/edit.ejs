@@ -1,10 +1,10 @@
 <%- include('../_layouts/header') %>
 
     <h2 class=""> Edit a story</h2>
-    <a href='/diary' class="btn btn-danger"> Cancel</a>
+    <a href='/diary/page/<%= pageno %>' class="btn btn-danger"> Cancel</a>
     <br><br>
 
-    <form method="post" action="/diary/edit/<%= id %>">
+    <form method="post" action="/diary/edit/<%= id %>?pageno=<%= pageno %>">
         <div class="form-group">
             <label for="">Title</label>
             <input class="form-control" type="text" name="title" value="<%= title %>" placeholder="Title">
