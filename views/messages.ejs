@@ -3,7 +3,7 @@
       
         <div class="alert alert-<%= type %>">
       <% messages[type].forEach(function (message) { %>
-        <%= message %>
+        <span class="glyphicon glyphicon-warning-sign"></span>&nbsp;<%= message %>
       <% }) %>
         </div>
     <% }) %>

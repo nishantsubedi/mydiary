@@ -7,3 +7,7 @@ $(() =>{
 
     })
 });
+
+var deleteThis = (id)  => {
+    $("#confirmDeleteBtn").attr("href", "/diary/delete/" + id);
+}

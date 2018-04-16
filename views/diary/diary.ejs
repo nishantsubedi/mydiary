@@ -22,10 +22,33 @@
                 <td><%= story.created %></td>
                 <td><%= story.updated %></td>
                 <td><a href="/diary/edit/<%= story._id %>"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> </a></td>
-                <td><a class="confirmDeletion" href="/diary/delete/<%= story._id %>"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </a></td>
+                <td><a class=""  onclick="deleteThis('<%= story._id %>')" data-toggle="modal" data-target="#deleteStoryModal"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </a></td>
             </tr>
         <% }); %>
     </tbody>
 </table>
 
+
+<!-- Modal -->
+<div id="deleteStoryModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+         
+          <h4 class="modal-title alert alert-danger">Confirm Deletion</h4>
+        </div>
+        <div class="modal-body">
+          <p>Story once deleted cannot be recovered</p>
+        </div>
+        <div class="modal-footer">
+           
+            <a type="button" id="confirmDeleteBtn" href="#" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span>&nbsp; Delete</a>
+            <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+  
+    </div>
+  </div>
 <%- include('../_layouts/footer') %>
