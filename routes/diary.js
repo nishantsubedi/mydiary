@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const h2p = require('html2plaintext');
+const dateTime = require('node-datetime');
 
 // Get story model
 var Story = require('../models/story');
@@ -30,7 +31,11 @@ router.get('/write', (req, res) => {
 
 // POST story from write diaries page
 router.post('/write', (req, res) => {
-   
+
+    var dt = dateTime.create();
+    var formatted = dt.format('Y-m-d H:M:S');
+
+
     req.checkBody('content', 'Content mush have a value').notEmpty();
 
     var title = req.body.title;
@@ -61,12 +66,12 @@ router.post('/write', (req, res) => {
             });
            
         }
-        var date = Date.now();
+       
         var story = new Story({
             title: title,
             content: content,
-            created: date,
-            updated: date
+            created: formatted,
+            updated: formatted
         });
         story.save((err) => {
             if(err) console.log(err);
@@ -110,7 +115,10 @@ router.get('/edit/:id', function(req, res){
 * POST edit story page
 */
 router.post('/edit/:id', (req, res) => {
-   
+    var dt = dateTime.create();
+    var formatted = dt.format('Y-m-d H:M:S');
+    
+
     req.checkBody('content', 'Content mush have a value').notEmpty();
 
     var title = req.body.title;
@@ -147,7 +155,7 @@ router.post('/edit/:id', (req, res) => {
             if(err) return console.log(err);
             story.title = title;
             story.content = content;
-            story.updated = date;
+            story.updated = formatted;
             story.save((err) => {
                 if(err) console.log(err);
                 req.flash('success', 'Story Edited');
