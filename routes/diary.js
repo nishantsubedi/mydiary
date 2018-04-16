@@ -72,14 +72,28 @@ router.post('/write', (req, res) => {
         story.save((err) => {
             if(err) console.log(err);
             req.flash('success', 'Story Added');
-            res.redirect('/');
-        })
+            res.redirect('/diary');
+        });
        
     }
    
 });
 
+// GET story page
+router.get('/story/:id', (req, res) => {
+    Story.findById(req.params.id, (err, story) => {
+        if(err) console.log(err);
+        if(!story){
+            res.redirect('/diary');
+        } else {
+                res.render('diary/story', {
+                title: story.title,
+                story: story
+            });
+        }
 
+    });
+});
 
 // Exports 
 module.exports = router;
