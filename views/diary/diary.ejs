@@ -22,7 +22,7 @@
                 <td><%= story.created %></td>
                 <td><%= story.updated %></td>
                 <td><a href="/diary/edit-story/<%= story._id %>"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> </a></td>
-                <td><a class="confirmDeletion" href="/diary/delete-story/<%= story._id %>"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </a></td>
+                <td><a class="confirmDeletion" href="/diary/delete/<%= story._id %>"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </a></td>
             </tr>
         <% }); %>
     </tbody>

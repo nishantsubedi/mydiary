@@ -62,7 +62,6 @@ router.post('/write', (req, res) => {
            
         }
         var date = Date.now();
-        console.log(date);
         var story = new Story({
             title: title,
             content: content,
@@ -95,5 +94,19 @@ router.get('/story/:id', (req, res) => {
     });
 });
 
+
+
+
+/*
+* GET delete story
+*/
+router.get('/delete/:id', function(req, res){
+    Story.findByIdAndRemove(req.params.id, (err) => {
+        if(err) return console.log(err);
+        req.flash('success', 'Story Deleted');
+        res.redirect('/diary/');
+    })
+    
+});
 // Exports 
 module.exports = router;
