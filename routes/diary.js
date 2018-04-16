@@ -178,7 +178,8 @@ router.get('/story/:id', (req, res) => {
         } else {
                 res.render('diary/story', {
                 title: story.title,
-                content: story.content
+                content: story.content,
+                id: story._id
             });
         }
 
