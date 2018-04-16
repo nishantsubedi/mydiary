@@ -78,6 +78,89 @@ router.post('/write', (req, res) => {
    
 });
 
+
+ /*
+* GET edit Story page
+*/
+router.get('/edit/:id', function(req, res){
+    Story.findById(req.params.id, (err, story) => {
+        if(err) {
+            // return console.log(err);
+            console.log(err);
+        }
+        
+        if(!story){
+            res.redirect('/diary');
+        }   
+        
+        else{
+            res.render('diary/edit', {
+                title: story.title,
+                content: story. content,
+                id: story._id
+            });
+        }
+    });
+ 
+    
+ });
+
+
+/*
+* POST edit story page
+*/
+router.post('/edit/:id', (req, res) => {
+   
+    req.checkBody('content', 'Content mush have a value').notEmpty();
+
+    var title = req.body.title;
+    var id = req.params.id; 
+    var content = req.body.content; 
+    var errors = req.validationErrors();
+    if(errors){
+         console.log(errors);
+        req.flash('danger', errors[0].msg);
+        res.render('diary/edit', {
+            title: 'Write a Story',
+            form: {
+                title: title,
+                content: content
+            }
+        }); 
+    } else {
+        if(title == ""){
+            
+            tempTitle = h2p(content).split(' ');
+            var lengthTitle = 0;
+            tempTitle.forEach(word => {
+                if(lengthTitle > 30){
+                    return;
+                }
+                title = title + ' ' + word;
+                lengthTitle += word.length;
+                
+            });
+           
+        }
+        var date = Date.now();
+        Story.findById(id, (err, story) => {
+            if(err) return console.log(err);
+            story.title = title;
+            story.content = content;
+            story.updated = date;
+            story.save((err) => {
+                if(err) console.log(err);
+                req.flash('success', 'Story Edited');
+                res.redirect('/diary/');
+            });
+        });
+       
+        
+       
+    }
+   
+});
+
 // GET story page
 router.get('/story/:id', (req, res) => {
     Story.findById(req.params.id, (err, story) => {
@@ -87,14 +170,12 @@ router.get('/story/:id', (req, res) => {
         } else {
                 res.render('diary/story', {
                 title: story.title,
-                story: story
+                content: story.content
             });
         }
 
     });
 });
-
-
 
 
 /*
